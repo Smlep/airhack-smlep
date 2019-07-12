@@ -40,6 +40,6 @@ class Task(models.Model):
             "dueTime": self.min_to_str(self.due_time),
             "lat": self.lat,
             "lng": self.lng,
-            "assignee_id": 1, #self.assignee.id,
+            "assignee_id": self.assignee.id if self.assignee is not None else None,
             "id": int(self.task_id)
         }
