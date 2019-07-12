@@ -21,6 +21,7 @@ class Request(models.Model):
 class Tasker(models.Model):
     tasker_id = models.IntegerField()
     request = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='taskers')
+    last_task = None
 
 
 class Task(models.Model):
