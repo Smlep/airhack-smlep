@@ -28,6 +28,8 @@ def minutes_from_string(str):
 def submit(rq):
     dict_res = rq.get_dict()
 
+    print('Sending: ')
+    print(json.dumps(dict_res))
     res = requests.post(submission_url, json=dict_res)
 
     print(res.status_code)

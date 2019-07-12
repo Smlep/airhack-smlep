@@ -10,7 +10,9 @@ if __name__ == '__main__':
     taskers_count = 5
     task_count = 50
 
-    tasks = [{"dueTime": "16:30", "lat": 48.85554319120794, "lng": 2.3613359633447204, "assignee_id": None, "id": 6480}]
+    tasks = [{"dueTime": "16:30", "lat": 48.85554319120794, "lng": 2.3613359633447204, "assignee_id": None, "id": 6480},
+             {"dueTime": "13:15", "lat": 48.85313729018271, "lng": 2.32256080014798, "assignee_id": None, "id": 9297},
+             {"dueTime": "21:45", "lat": 48.838453425693785, "lng": 2.372673134911582, "assignee_id": None, "id": 1889}]
 
     obj = {
         'batchId': batch_id,

@@ -24,7 +24,6 @@ class Tasker(models.Model):
     request = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='taskers')
 
 
-
 class Task(models.Model):
     task_id = models.CharField(max_length=20)
     due_time = models.IntegerField()
@@ -34,14 +33,13 @@ class Task(models.Model):
     request = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='tasks')
 
     def min_to_str(self, minutes):
-        return str(minutes / 60) + ':' + str(minutes % 60)
+        return str(minutes // 60) + ':' + str(minutes % 60)
 
     def get_dict(self):
-         return {
+        return {
             "dueTime": self.min_to_str(self.due_time),
             "lat": self.lat,
             "lng": self.lng,
-            "assignee_id": self.assignee,
+            "assignee_id": 1, #self.assignee.id,
             "id": self.task_id
         }
-
