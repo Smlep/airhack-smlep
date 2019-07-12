@@ -8,6 +8,7 @@ class Request(models.Model):
     batch_id = models.CharField(max_length=50)
     taskers_count = models.IntegerField()
     tasks_count = models.IntegerField()
+    time = models.DateTimeField()
 
 
 class Tasker(models.Model):
