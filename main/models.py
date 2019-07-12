@@ -33,7 +33,7 @@ class Task(models.Model):
     request = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='tasks')
 
     def min_to_str(self, minutes):
-        return str(minutes // 60) + ':' + str(minutes % 60)
+        return "{:02d}".format(minutes // 60) + ':' + "{:02d}".format(minutes % 60)
 
     def get_dict(self):
         return {
@@ -41,5 +41,5 @@ class Task(models.Model):
             "lat": self.lat,
             "lng": self.lng,
             "assignee_id": 1, #self.assignee.id,
-            "id": self.task_id
+            "id": int(self.task_id)
         }

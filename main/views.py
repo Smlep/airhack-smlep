@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Request, Tasker, Task
 
 submission_url = 'http://airhack-api.herokuapp.com/api/submitTasks'
+token = 'ilG6KgDxS5EgXzmhLrQuwSl3uQ2VF7pYx2oAVS0Ie9nbwavXo6BAITdFEcwk'
+hed = {'Authorization': 'Bearer ' + token}
 
 
 # Create your views here.
@@ -30,10 +32,11 @@ def submit(rq):
 
     print('Sending: ')
     print(json.dumps(dict_res))
-    res = requests.post(submission_url, json=dict_res)
+    res = requests.post(submission_url, json=dict_res, headers=hed)
 
     print(res.status_code)
-    print(res.content)
+    print(res.text)
+    print(res.json())
 
 
 @csrf_exempt
