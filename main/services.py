@@ -71,6 +71,7 @@ def assign_task(tasker, task):
 
 def get_nearest_unassigned(rq, tasker, travel_time_max=60):
     remaining_tasks = Task.objects.filter(request=rq, assignee=None)
+    remaining_tasks = filter(lambda t: tasker.last_task.due_time + cost(tasker, t) < t.due_time, remaining_tasks)
     remaining_tasks = list(filter(lambda t: cost(tasker, t) < travel_time_max, remaining_tasks))
 
     if len(remaining_tasks) == 0:
