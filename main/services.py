@@ -71,15 +71,15 @@ def assign_task(tasker, task):
 
 def get_nearest_unassigned(rq, tasker, travel_time_max=60):
     remaining_tasks = Task.objects.filter(request=rq, assignee=None)
-    remaining_tasks = filter(lambda t: tasker.last_task.due_time + cost(tasker, t) < t.due_time, remaining_tasks)
-    remaining_tasks = list(filter(lambda t: cost(tasker, t) < travel_time_max, remaining_tasks))
+    remaining_tasks = list(filter(lambda t: tasker.last_task.due_time + cost(tasker, t) < t.due_time, remaining_tasks))
+    #remaining_tasks = list(filter(lambda t: cost(tasker, t) < travel_time_max, remaining_tasks))
 
     if len(remaining_tasks) == 0:
         return None
 
     curr_lat, curr_lng = get_curr_pos(tasker)
 
-    return min(remaining_tasks, key=lambda task: distance(curr_lat, curr_lng, task.lat, task.lng))
+    return min(remaining_tasks, key=lambda task: distance(curr_lat, curr_lng, task.lat, task.lng) + task.due_time)
 
 
 def get_earliest_unassigned(rq):
