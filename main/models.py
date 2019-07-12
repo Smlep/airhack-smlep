@@ -29,7 +29,7 @@ class Task(models.Model):
     due_time = models.IntegerField()
     lat = models.FloatField()
     lng = models.FloatField()
-    assignee = models.ForeignKey(Tasker, null=True, on_delete=models.CASCADE)
+    assignee = models.ForeignKey(Tasker, null=True, on_delete=models.CASCADE, related_name='tasks')
     request = models.ForeignKey(Request, on_delete=models.CASCADE, related_name='tasks')
 
     def min_to_str(self, minutes):
@@ -40,6 +40,23 @@ class Task(models.Model):
             "dueTime": self.min_to_str(self.due_time),
             "lat": self.lat,
             "lng": self.lng,
-            "assignee_id": self.assignee.id if self.assignee is not None else None,
+            "assignee_id": self.assignee.tasker_id if self.assignee is not None else None,
             "id": int(self.task_id)
         }
+
+    def __str__(self):
+        return self.get_dict()
+
+
+def assign_task(tasker, task):
+    current_tasks = tasker.tasks.all()
+    if len(current_tasks) == 0:
+        task.assignee = tasker
+        task.save()
+        return True
+
+    sorted_tasks = sorted(current_tasks, key=lambda x: x.due_time)
+    last_task = sorted_tasks[:-1]
+    print(last_task)
+
+    return False

@@ -7,6 +7,7 @@ import requests
 from django.shortcuts import HttpResponse, render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Request, Tasker, Task
+from .services import choose_tasks
 
 submission_url = 'http://airhack-api.herokuapp.com/api/submitTasks'
 token = 'ilG6KgDxS5EgXzmhLrQuwSl3uQ2VF7pYx2oAVS0Ie9nbwavXo6BAITdFEcwk'
@@ -25,7 +26,6 @@ def index(request):
 def minutes_from_string(str):
     nums = str.split(':')
     return int(nums[0]) * 60 + int(nums[1])
-
 
 def submit(rq):
     dict_res = rq.get_dict()
@@ -60,6 +60,7 @@ def entry(request):
         task = Task(due_time=due_time, lat=lat, lng=lng, assignee=None, task_id=task_id, request=rq)
         task.save()
 
+    choose_tasks(rq)
     print('Saving new request')
     submit(rq)
     return HttpResponse('Received')
