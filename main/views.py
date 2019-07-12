@@ -28,7 +28,10 @@ def minutes_from_string(str):
 def submit(rq):
     dict_res = rq.get_dict()
 
-    requests.post(submission_url, json=dict_res)
+    res = requests.post(submission_url, json=dict_res)
+
+    print(res.status_code)
+    print(res.content)
 
 
 @csrf_exempt
