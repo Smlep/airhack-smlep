@@ -2,10 +2,13 @@
 
 import datetime
 import json
+import requests
 
 from django.shortcuts import HttpResponse, render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Request, Tasker, Task
+
+submission_url = 'http://airhack-api.herokuapp.com/api/submitTasks'
 
 
 # Create your views here.
@@ -19,7 +22,13 @@ def index(request):
 
 def minutes_from_string(str):
     nums = str.split(':')
-    return nums[0] * 60 + nums[1]
+    return int(nums[0]) * 60 + int(nums[1])
+
+
+def submit(rq):
+    dict_res = rq.get_dict()
+
+    requests.post(submission_url, json=dict_res)
 
 
 @csrf_exempt
@@ -44,4 +53,5 @@ def entry(request):
         task.save()
 
     print('Saving new request')
+    submit(rq)
     return HttpResponse('Received')

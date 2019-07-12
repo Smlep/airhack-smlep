@@ -19,7 +19,6 @@ if __name__ == '__main__':
         'tasks': tasks
     }
 
-    content = json.dumps(obj)
     print('Sending:')
-    print(content)
+    print(json.dumps(obj))
     requests.post(url, json=obj)
