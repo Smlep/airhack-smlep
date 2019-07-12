@@ -42,7 +42,7 @@ def get_curr_pos(tasker, cache=True):
 def cost(tasker, task):
     last_lat, last_lng = get_curr_pos(tasker)
     dist = distance(task.lat, task.lng, last_lat, last_lng)
-    moving_time = dist / SPEED
+    moving_time = dist * 60 / SPEED
 
     return moving_time + EXECUTION_TIME_TASK
 
@@ -79,7 +79,7 @@ def get_nearest_unassigned(rq, tasker, travel_time_max=60):
 
     curr_lat, curr_lng = get_curr_pos(tasker)
 
-    return min(remaining_tasks, key=lambda task: distance(curr_lat, curr_lng, task.lat, task.lng) + task.due_time)
+    return min(remaining_tasks, key=lambda task: distance(curr_lat, curr_lng, task.lat, task.lng) * 60 / SPEED + task.due_time)
 
 
 def get_earliest_unassigned(rq):
