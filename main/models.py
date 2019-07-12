@@ -47,18 +47,3 @@ class Task(models.Model):
         return str(self.get_dict())
 
 
-def assign_task(tasker, task, EXECUTION_TIME_TASK, SPEED):
-    current_tasks = tasker.tasks.all()
-    if len(current_tasks) == 0:
-        task.assignee = tasker
-        task.save()
-        return True
-
-    sorted_tasks = sorted(current_tasks, key=lambda x: x.due_time)
-    last_task = sorted_tasks[-1]
-    if last_task.due_time + EXECUTION_TIME_TASK * 2 < task.due_time:
-        task.assignee = tasker
-        task.save()
-        return True
-
-    return False
