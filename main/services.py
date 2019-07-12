@@ -1,5 +1,7 @@
 from .models import *
 
+EXECUTION_TIME_TASK = 30
+SPEED = 10
 
 def choose_tasks(rq):
     tasks = Task.objects.filter(request=rq)
@@ -9,5 +11,5 @@ def choose_tasks(rq):
 
     for task in sorted_tasks:
         for tasker in taskers:
-            if assign_task(tasker, task):
+            if assign_task(tasker, task, EXECUTION_TIME_TASK, SPEED):
                 break

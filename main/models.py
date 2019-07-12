@@ -3,7 +3,6 @@ from django.db import models
 
 # Create your models here.
 
-
 class Request(models.Model):
     batch_id = models.CharField(max_length=50)
     taskers_count = models.IntegerField()
@@ -45,10 +44,10 @@ class Task(models.Model):
         }
 
     def __str__(self):
-        return self.get_dict()
+        return str(self.get_dict())
 
 
-def assign_task(tasker, task):
+def assign_task(tasker, task, EXECUTION_TIME_TASK, SPEED):
     current_tasks = tasker.tasks.all()
     if len(current_tasks) == 0:
         task.assignee = tasker
@@ -56,7 +55,10 @@ def assign_task(tasker, task):
         return True
 
     sorted_tasks = sorted(current_tasks, key=lambda x: x.due_time)
-    last_task = sorted_tasks[:-1]
-    print(last_task)
+    last_task = sorted_tasks[-1]
+    if last_task.due_time + EXECUTION_TIME_TASK * 2 < task.due_time:
+        task.assignee = tasker
+        task.save()
+        return True
 
     return False
