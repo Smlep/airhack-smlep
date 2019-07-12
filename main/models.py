@@ -20,6 +20,6 @@ class Task(models.Model):
     task_id = models.CharField(max_length=20)
     due_time = models.IntegerField()
     lat = models.FloatField()
-    lng = models.FloatField
-    assignee = models.ForeignKey(Tasker, on_delete=models.CASCADE)
+    lng = models.FloatField()
+    assignee = models.ForeignKey(Tasker, null=True, on_delete=models.CASCADE)
     request = models.ForeignKey(Request, on_delete=models.CASCADE)
