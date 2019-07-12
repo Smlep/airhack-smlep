@@ -32,7 +32,7 @@ SECRET_KEY = 'f5&mb%-&*xd42!9fw&#63%(hs3-ku5-ong13eg4zf33n^s47+v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'https://airhack-smlep.herokuapp.com/']
+ALLOWED_HOSTS = ['127.0.0.1', 'airhack-smlep.herokuapp.com/']
 
 
 # Application definition
