@@ -1,8 +1,8 @@
 from .models import *
-from .services import distance
+from .services import distance, SPEED
 
 
-def compute_total_distance(tasker):
+def compute_distance_stats(tasker):
     tasks = tasker.tasks.all()
     tasks = sorted(tasks, key=lambda t: t.due_time)
     dist = 0
@@ -10,7 +10,21 @@ def compute_total_distance(tasker):
         last = tasks[i]
         next = tasks[i + 1]
         dist += distance(last.lat, last.lng, next.lat, next.lng)
-    return dist
+    return dist, dist / len(tasks)
+
+
+class TaskerStats:
+    def __init__(self, tasker):
+        self.tasker = tasker
+        self.mean_distance = None
+        self.total_distance = None
+        self.total_moving_time = None
+        self.mean_moving_time = None
+
+    def compute_personal_metrics(self):
+        self.total_distance, self.mean_distance = compute_distance_stats(self.tasker)
+        self.total_moving_time = self.total_distance * 60 / SPEED
+        self.mean_moving_time = self.mean_distance * 60 / SPEED
 
 
 def compute_metrics(rq):
@@ -25,8 +39,28 @@ def compute_metrics(rq):
 
     total_distance = 0
     for tasker in taskers:
-        total_distance += compute_total_distance(tasker)
+        total, mean = compute_distance_stats(tasker)
+        total_distance += total
 
     print('Total distance ' + str(total_distance))
 
     return task_percentage, total_distance
+
+
+class RequestStats:
+    def __init__(self, request):
+        self.request = request
+        self.task_percentage = None
+        self.mean_distance = None
+        self.total_distance = None
+        self.total_moving_time = None
+        self.mean_moving_time = None
+
+    def compute_metrics(self):
+        self.task_percentage, self.total_distance = compute_metrics(self.request)
+        tasks = Task.objects.filter(request=self.request)
+        tasks = tasks.exclude(assignee=None)
+        nb_tasks = len(list(tasks))
+        self.mean_distance = self.total_distance / nb_tasks
+        self.total_moving_time = self.total_distance * 60 / SPEED
+        self.mean_moving_time = self.mean_distance * 60 / SPEED

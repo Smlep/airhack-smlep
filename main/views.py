@@ -8,7 +8,7 @@ from django.shortcuts import HttpResponse, render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Request, Tasker, Task
 from .services import choose_tasks_chain_access, choose_tasks_closest_one_by_one, choose_tasks_closest_rounds
-from .metrics import compute_metrics
+from .metrics import compute_metrics, RequestStats, TaskerStats
 
 submission_url = 'http://airhack-api.herokuapp.com/api/submitTasks'
 token = 'ilG6KgDxS5EgXzmhLrQuwSl3uQ2VF7pYx2oAVS0Ie9nbwavXo6BAITdFEcwk'
@@ -18,8 +18,52 @@ hed = {'Authorization': 'Bearer ' + token}
 # Create your views here.
 
 def index(request):
-    context = {
+    requests = list(Request.objects.all())
+    last_request = requests[-1]
+    taskers = Tasker.objects.filter(request=last_request)
 
+    taskers_stats = []
+
+    print(len(taskers))
+    for tasker in taskers:
+        tstats = TaskerStats(tasker)
+        tstats.compute_personal_metrics()
+        taskers_stats.append(tstats)
+
+    rstat = RequestStats(last_request)
+    rstat.compute_metrics()
+
+    context = {
+        'taskers_stats': taskers_stats,
+        'request_stats': rstat,
+        'extra_name': ': Stats for last request',
+        'requests': reversed(requests)
+    }
+    return render(request, 'main/index.html', context)
+
+
+def request_details(request, id):
+    requests = list(Request.objects.all())
+    rq = Request.objects.get(pk=id)
+
+    taskers = Tasker.objects.filter(request=rq)
+
+    taskers_stats = []
+
+    print(len(taskers))
+    for tasker in taskers:
+        tstats = TaskerStats(tasker)
+        tstats.compute_personal_metrics()
+        taskers_stats.append(tstats)
+
+    rstat = RequestStats(rq)
+    rstat.compute_metrics()
+
+    context = {
+        'taskers_stats': taskers_stats,
+        'request_stats': rstat,
+        'extra_name': ': Stats for ' + rq.batch_id,
+        'requests': reversed(requests)
     }
     return render(request, 'main/index.html', context)
 

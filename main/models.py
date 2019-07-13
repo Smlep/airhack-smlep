@@ -47,5 +47,3 @@ class Task(models.Model):
 
     def __str__(self):
         return str(self.get_dict())
-
-

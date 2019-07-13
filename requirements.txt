@@ -3,3 +3,6 @@ django-environ
 mysqlclient
 whitenoise
 requests
+django-bootstrap-static
+django-crispy-forms
+django-fontawesome

@@ -1,10 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>You're here</h1>
-</body>
-</html>
+{% extends 'main/base.html' %}
+{% load fontawesome %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/index.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="container">
+            <div>
+                <div class="title">
+                    <span> AirHack{{ extra_name }}</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordred table-striped assistants-list">
+                        <thead>
+                        <th>Request Id</th>
+                        <th>Number of tasks</th>
+                        <th>Number of taskers</th>
+                        <th>Batch Id</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{ request_stats.request.id }}</td>
+                            <td>{{ request_stats.request.tasks_count }}</td>
+                            <td>{{ request_stats.request.taskers_count }}</td>
+                            <td>{{ request_stats.request.batch_id }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="part-title">
+                    <span>Global Metrics</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordred table-striped assistants-list">
+                        <thead>
+                        <th>Task percentage</th>
+                        <th>Total distance (km)</th>
+                        <th>Mean distance / task (km)</th>
+                        <th>Total moving time (minutes)</th>
+                        <th>Mean moving time / task (minutes)</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{ request_stats.task_percentage|floatformat }}</td>
+                            <td>{{ request_stats.total_distance |floatformat }}</td>
+                            <td>{{ request_stats.mean_distance|floatformat }}</td>
+                            <td>{{ request_stats.total_moving_time|floatformat }}</td>
+                            <td>{{ request_stats.mean_moving_time|floatformat }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="part-title">
+                    <span>Per-tasker metrics</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordred table-striped assistants-list">
+                        <thead>
+                        <th>Id</th>
+                        <th>Total distance (km)</th>
+                        <th>Mean distance between 2 tasks (km)</th>
+                        <th>Time spent moving (minutes)</th>
+                        <th>Mean time spent moving between 2 tasks (minutes)</th>
+                        </thead>
+                        <tbody>
+                        {% for tstats in taskers_stats %}
+                            <tr>
+                                <td>{{ tstats.tasker.tasker_id }}</td>
+                                <td>{{ tstats.total_distance|floatformat }}</td>
+                                <td>{{ tstats.mean_distance|floatformat }}</td>
+                                <td>{{ tstats.total_moving_time|floatformat }}</td>
+                                <td>{{ tstats.mean_moving_time|floatformat }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
