@@ -7,6 +7,6 @@ def compute_metrics(rq):
 
     unassigned = tasks.filter(assignee=None)
 
-    task_percentage = 1 - len(unassigned) / len(taskers)
+    task_percentage = 1 - (len(unassigned) / len(taskers))
 
     print('Percentage ' + str(task_percentage))
