@@ -8,7 +8,7 @@ import requests
 from django.shortcuts import HttpResponse, render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Request, Tasker, Task
-from .services import choose_tasks_chain_access, choose_tasks_closest_one_by_one, choose_tasks_closest_rounds
+from .services import choose_tasks_closest_one_by_one, choose_tasks_closest_rounds
 from .metrics import compute_metrics, RequestStats, TaskerStats
 
 env = environ.Env(

@@ -69,10 +69,9 @@ def assign_task(tasker, task):
     return False
 
 
-def get_nearest_unassigned(rq, tasker, travel_time_max=60):
+def get_nearest_unassigned(rq, tasker):
     remaining_tasks = Task.objects.filter(request=rq, assignee=None)
     remaining_tasks = list(filter(lambda t: tasker.last_task.due_time + cost(tasker, t) < t.due_time, remaining_tasks))
-    # remaining_tasks = list(filter(lambda t: cost(tasker, t) < travel_time_max, remaining_tasks))
 
     if len(remaining_tasks) == 0:
         return None
@@ -87,8 +86,8 @@ def get_earliest_unassigned(rq):
     tasks = Task.objects.filter(request=rq, assignee=None)
     if len(tasks) == 0:
         return None
-    sorted_tasks = sorted(tasks, key=lambda x: x.due_time)
-    return sorted_tasks[0]
+    min_task = min(tasks, key=lambda x: x.due_time)
+    return min_task
 
 
 def choose_tasks_chain_access(rq):
