@@ -61,7 +61,7 @@ def entry(request):
         task = Task(due_time=due_time, lat=lat, lng=lng, assignee=None, task_id=task_id, request=rq)
         task.save()
 
-    choose_tasks_closest_one_by_one(rq)
+    choose_tasks_closest_rounds(rq)
     print('Saving new request')
     try:
         submit(rq)
