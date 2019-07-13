@@ -7,7 +7,7 @@ import requests
 from django.shortcuts import HttpResponse, render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Request, Tasker, Task
-from .services import choose_tasks_chain_access, choose_tasks_closest
+from .services import choose_tasks_chain_access, choose_tasks_closest_one_by_one, choose_tasks_closest_rounds
 
 submission_url = 'http://airhack-api.herokuapp.com/api/submitTasks'
 token = 'ilG6KgDxS5EgXzmhLrQuwSl3uQ2VF7pYx2oAVS0Ie9nbwavXo6BAITdFEcwk'
@@ -60,7 +60,7 @@ def entry(request):
         task = Task(due_time=due_time, lat=lat, lng=lng, assignee=None, task_id=task_id, request=rq)
         task.save()
 
-    choose_tasks_closest(rq)
+    choose_tasks_closest_rounds(rq)
     print('Saving new request')
     submit(rq)
     return HttpResponse('Received')

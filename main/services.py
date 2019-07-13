@@ -72,14 +72,15 @@ def assign_task(tasker, task):
 def get_nearest_unassigned(rq, tasker, travel_time_max=60):
     remaining_tasks = Task.objects.filter(request=rq, assignee=None)
     remaining_tasks = list(filter(lambda t: tasker.last_task.due_time + cost(tasker, t) < t.due_time, remaining_tasks))
-    #remaining_tasks = list(filter(lambda t: cost(tasker, t) < travel_time_max, remaining_tasks))
+    # remaining_tasks = list(filter(lambda t: cost(tasker, t) < travel_time_max, remaining_tasks))
 
     if len(remaining_tasks) == 0:
         return None
 
     curr_lat, curr_lng = get_curr_pos(tasker)
 
-    return min(remaining_tasks, key=lambda task: distance(curr_lat, curr_lng, task.lat, task.lng) * 60 / SPEED + task.due_time)
+    return min(remaining_tasks,
+               key=lambda task: distance(curr_lat, curr_lng, task.lat, task.lng) * 60 / SPEED + task.due_time)
 
 
 def get_earliest_unassigned(rq):
@@ -102,7 +103,7 @@ def choose_tasks_chain_access(rq):
                 break
 
 
-def choose_tasks_closest(rq):
+def choose_tasks_closest_one_by_one(rq):
     taskers = Tasker.objects.filter(request=rq)
 
     for tasker in taskers:
@@ -114,3 +115,25 @@ def choose_tasks_closest(rq):
         while nearest is not None:
             set_task(tasker, nearest)
             nearest = get_nearest_unassigned(rq, tasker)
+
+
+def choose_tasks_closest_rounds(rq):
+    taskers = Tasker.objects.filter(request=rq)
+
+    for tasker in taskers:
+        nearest = get_earliest_unassigned(rq)
+        if nearest is None:
+            tasker.done = True
+        set_task(tasker, nearest)
+
+    all_done = False
+    while not all_done:
+        for tasker in taskers:
+            if tasker.done:
+                continue
+            nearest = get_nearest_unassigned(rq, tasker)
+            if nearest is not None:
+                set_task(tasker, nearest)
+            else:
+                tasker.done = True
+        all_done = sum([tasker.done for tasker in taskers]) == rq.taskers_count
