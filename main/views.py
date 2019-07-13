@@ -103,8 +103,8 @@ def entry(request):
     rq = Request(batch_id=batch_id, taskers_count=taskers_count, tasks_count=task_count, time=now)
     rq.save()
 
-    for i in range(1, taskers_count + 1):
-        Tasker(tasker_id=i, request=rq).save()
+    taskers = [Tasker(tasker_id=i, request=rq) for i in range(1, taskers_count + 1)]
+    Tasker.objects.bulk_create(taskers)
 
     tasks = []
     for task in json_body['tasks']:
