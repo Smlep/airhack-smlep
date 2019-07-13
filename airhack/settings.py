@@ -32,7 +32,7 @@ SECRET_KEY = 'f5&mb%-&*xd42!9fw&#63%(hs3-ku5-ong13eg4zf33n^s47+v'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['127.0.0.1', 'airhack-smlep.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'airhack-smlep.herokuapp.com', 'localhost']
 
 # Application definition
 
@@ -137,6 +137,8 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+if env('SSL') == 'True':
+    SECURE_SSL_REDIRECT = True
 
 PWA_APP_NAME = 'AirHack'
 PWA_APP_DESCRIPTION = "App for AirHack 2019"
