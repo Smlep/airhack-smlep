@@ -106,14 +106,15 @@ def entry(request):
     for i in range(1, taskers_count + 1):
         Tasker(tasker_id=i, request=rq).save()
 
+    tasks = []
     for task in json_body['tasks']:
         due_time = minutes_from_string(task['dueTime'])
         lat = task['lat']
         lng = task['lng']
         task_id = task['id']
-        task = Task(due_time=due_time, lat=lat, lng=lng, assignee=None, task_id=task_id, request=rq)
-        task.save()
+        tasks.append((Task(due_time=due_time, lat=lat, lng=lng, assignee=None, task_id=task_id, request=rq)))
 
+    Task.objects.bulk_create(tasks)
     print('Going for mode ' + str(env('MODE')))
     if env('MODE') == 'round':
         choose_tasks_closest_rounds(rq)
