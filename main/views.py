@@ -1,6 +1,7 @@
 #!/bin/python3
 
 import datetime
+import environ
 import json
 import requests
 
@@ -9,6 +10,16 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Request, Tasker, Task
 from .services import choose_tasks_chain_access, choose_tasks_closest_one_by_one, choose_tasks_closest_rounds
 from .metrics import compute_metrics, RequestStats, TaskerStats
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    MODE=(str, 'round')
+)
+
+environ.Env.read_env('.env')
+
+
 
 submission_url = 'http://airhack-api.herokuapp.com/api/submitTasks'
 token = 'ilG6KgDxS5EgXzmhLrQuwSl3uQ2VF7pYx2oAVS0Ie9nbwavXo6BAITdFEcwk'
@@ -105,7 +116,12 @@ def entry(request):
         task = Task(due_time=due_time, lat=lat, lng=lng, assignee=None, task_id=task_id, request=rq)
         task.save()
 
-    choose_tasks_closest_rounds(rq)
+    print('Going for mode ' + str(env('MODE')))
+    if env('MODE') == 'round':
+        choose_tasks_closest_rounds(rq)
+    else:
+        choose_tasks_closest_one_by_one(rq)
+
     print('Saving new request')
     try:
         submit(rq)

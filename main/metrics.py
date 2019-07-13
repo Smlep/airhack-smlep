@@ -5,6 +5,8 @@ from .services import distance, SPEED
 def compute_distance_stats(tasker):
     tasks = tasker.tasks.all()
     tasks = sorted(tasks, key=lambda t: t.due_time)
+    if len(tasks) == 0:
+        return 0, 0
     dist = 0
     for i in range(len(tasks) - 1):
         last = tasks[i]

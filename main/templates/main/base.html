@@ -1,3 +1,4 @@
+<html lang="us">
 {% load static %}
 <head>
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
@@ -6,6 +7,7 @@
           integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     {% block stylesheets %}
     {% endblock %}
+    <title>AirHack 2019</title>
 </head>
 <body style="padding-top: 65px; background-color: #f8fafc">
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top custom-navbar">
@@ -25,7 +27,8 @@
             </a>
             <div class="dropdown-menu">
                 {% for request in requests %}
-                    <a class="dropdown-item navbar-text" href="{% url 'request_details' request.id %}">{{ request.batch_id }}</a>
+                    <a class="dropdown-item navbar-text"
+                       href="{% url 'request_details' request.id %}">{{ request.batch_id }}</a>
                 {% endfor %}
             </div>
         </li>
@@ -41,3 +44,4 @@
     <script>window.jQuery || document.write('<script src="/docs/4.3/assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 {% endblock %}
+</html>
