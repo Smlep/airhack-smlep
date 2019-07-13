@@ -34,6 +34,10 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['127.0.0.1', 'airhack-smlep.herokuapp.com', 'localhost']
 
+if env('SSL') == 'True':
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -46,7 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap',
     'fontawesome',
-    'pwa'
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -137,9 +141,7 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-if env('SSL') == 'True':
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ('X-Forwarded-Proto', 'https')
+
 
 PWA_APP_NAME = 'AirHack'
 PWA_APP_DESCRIPTION = "App for AirHack 2019"
