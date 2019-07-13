@@ -28,6 +28,7 @@ def minutes_from_string(str):
     nums = str.split(':')
     return int(nums[0]) * 60 + int(nums[1])
 
+
 def submit(rq):
     dict_res = rq.get_dict()
 
@@ -37,7 +38,6 @@ def submit(rq):
 
     print(res.status_code)
     print(res.text)
-    print(res.json())
 
 
 @csrf_exempt

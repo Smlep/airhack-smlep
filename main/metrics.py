@@ -4,6 +4,7 @@ from .services import distance
 
 def compute_total_distance(tasker):
     tasks = tasker.tasks.all()
+    tasks = sorted(tasks, key=lambda t: t.due_time)
     dist = 0
     for i in range(len(tasks) - 1):
         last = tasks[i]
