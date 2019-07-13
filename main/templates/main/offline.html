@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% load fontawesome %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/index.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="container">
+            <div>
+                <div class="offline-title">
+                    <span> Sorry but you are offline!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

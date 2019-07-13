@@ -6,3 +6,4 @@ requests
 django-bootstrap-static
 django-crispy-forms
 django-fontawesome
+django-pwa

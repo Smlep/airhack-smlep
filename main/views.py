@@ -19,8 +19,6 @@ env = environ.Env(
 
 environ.Env.read_env('.env')
 
-
-
 submission_url = 'http://airhack-api.herokuapp.com/api/submitTasks'
 token = 'ilG6KgDxS5EgXzmhLrQuwSl3uQ2VF7pYx2oAVS0Ie9nbwavXo6BAITdFEcwk'
 hed = {'Authorization': 'Bearer ' + token}
@@ -129,3 +127,15 @@ def entry(request):
         pass
     compute_metrics(rq)
     return HttpResponse('Received')
+
+
+def custom_offline(request):
+    return render(request, 'main/offline.html', {})
+
+
+def custom_offline_request(request):
+    return render(request, 'main/offline_request.html', {})
+
+
+def last_cached_request(request):
+    return index(request)
