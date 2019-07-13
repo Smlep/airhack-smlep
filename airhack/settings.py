@@ -139,6 +139,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 if env('SSL') == 'True':
     SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('X-Forwarded-Proto', 'https')
 
 PWA_APP_NAME = 'AirHack'
 PWA_APP_DESCRIPTION = "App for AirHack 2019"
